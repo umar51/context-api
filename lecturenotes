@@ -1,0 +1,215 @@
+continue from class 5 in 
+https://panacloud.github.io/bootcamp-2020/?fbclid=IwAR33hPT9-3-38CvFim5Qln-KQiWpLKO9k7Q0R0FbCaLLPiNX2vH1cCr-VRM
+
+
+	
+		
+				*** An Introduction To React’s Context API ***
+
+
+1. React’s Context API which allows you to manage global application states in your React apps without resorting to props drilling.
+
+2. Hooks are a new addition in React 16.8. They let you use state and other React features without writing a class.”
+
+
+
+
+
+
+					**** THE useState HOOK ***
+
+1.  A useState hook takes the initial value of our state as the only argument, and it returns an array of two elements.
+
+2. The first element is our state variable and the second element is a function in which we can use the update the value of the state variable.
+
+3. Example code
+
+import React, {useState} from "react";
+
+	function SampleComponent(){
+	   const [count, setCount] = useState(0);
+	}
+
+4.  count is our state variable and its initial value is 0 while setCount is a function which we can use to update the value of count.
+
+
+
+
+				     **** THE useContext HOOK ****
+
+Understanding useContext with example
+
+1. We want to build a “theme toggler” component which toggles between light mode and dark mode for our React app. Every component has to have access to the current theme mode so they can be styled accordingly.
+
+2. Normally, we would provide the current theme mode to all the components through props and update the current theme using state:
+
+	import React from "react";
+	import ReactDOM from "react-dom";
+
+	function App() {
+	  return (
+	    <div>
+	      <Text theme= "blue" />
+	      <h1>{theme}</h1>
+	    </div>
+	  );
+	}
+
+	function Text({theme}) {
+	return(
+	  <h1 style = {{
+	     color: `${theme}`
+	  }}>{theme}</h1>
+	);
+	}
+
+	const rootElement = document.getElementById("root");
+	ReactDOM.render(<App />, rootElement);
+
+3. We will create a state called “theme” using the useState hook. The useState hook will return the current value of the theme and a function which we can use to update the theme.
+
+	const [theme, setTheme] = React.useState("blue");
+
+
+4. We will also add a button element to our App component. This button will be used to toggle the themes and it needs a click event handler. So, let us write the click event handler like so:
+
+	const onClickHandler = () => {
+	  setTheme();
+	}
+
+
+5. Now, we want to set the new theme to Red if the current theme is Blue, and vice versa. Instead of using an if statement, a more convenient way to do this is with the help of the ternary operator in JavaScript.
+
+	setTheme( theme === "red"? "blue": "red");
+
+
+6. So now, we have written our onClick handler. Let’s add this button element to the App component:
+
+	<button onClick = {onClickHandler}>Change theme</button>
+
+
+7. Let us also change the value of the theme props of the Text component to the theme state.
+
+	<Text theme={theme}/>  //passing the theme state instead of prop color
+
+8. Now whole code is
+
+	import React from "react";
+	import ReactDOM from "react-dom";
+
+	import "./styles.css";
+
+
+	function App() {
+	  const[theme, setTheme] = React.useState("red");
+
+	  const onClickHandler = () => {
+	  setTheme( theme === "red"? "blue": "red");
+	  }
+
+	  return (
+	    <div>
+	      <Text theme={theme}/>
+	      <button onClick = {onClickHandler}>Change theme</button>
+	    </div>
+	  );
+	}
+
+	function Text({theme}) {
+	return(
+	  <h1 style = {{
+	     color: `${theme}`
+	  }}>{theme}</h1>
+	);
+	}
+
+	const rootElement = document.getElementById("root");
+	ReactDOM.render(<App />, rootElement);
+
+
+
+9. We can now toggle between our two themes. However, if this was a much larger application, it would be difficult to use the theme in deeply nested components and the code becomes unwieldy
+
+
+
+Introducing The Context API
+
+
+10. “Context provides a way to pass data through the component tree without having to pass props down manually at every level.”
+
+11. It provides a way for you to make particular data available to all components throughout the component tree no matter how deeply nested that component may be.
+
+
+11. Example: Passing theme prop from parent to grandchild component manually
+
+	const App = () => {
+	  return(
+	    <ParentComponent theme = "light"/>
+	  );
+	}
+
+	const ParentComponent = (props) => (
+	  <Child theme = {props.theme} />
+	)
+
+	const Child = (props) => (
+	  <Grandchild theme = {props.theme} />
+	)
+
+	const Grandchild = (props) => (
+	  <p>Theme: {props.theme}</p>
+	)
+
+
+12. We had to pass that props to all components down the component tree to get it where it is needed which is the GrandChild component. The ChildComponent had nothing to do with the theme props but was just used as an intermediary.
+
+
+13. This is the problem that Context solves. With Context, every component in the component tree has access to whatever data we decide to put in our context.
+
+
+
+Let’s Get Started With Context
+
+
+14. It’s time to replicate the theme toggling button we built at the beginning of the article with the Context API. 
+
+15. This time, our theme toggler will be a separate component. We will build a ThemeToggler component which switches the theme of our React app using Context.
+
+16. Once you have initialized your React project, create a file called ThemeContext.js in your /src folder. You can also create a folder called /context and place your ThemeContext file in there if you want.
+
+
+CREATING YOUR CONTEXT API
+
+17. To create a context, we use React.createContext which creates a context object. You can pass in anything as an argument to React.createContext. 
+
+18. In this case, we are going to pass in a string which is the current theme mode. So now our current theme mode is the “light” theme mode.
+
+	import React from "react";
+
+	const ThemeContext = React.createContext("light");
+	export default ThemeContext;
+
+
+19. To make this context available to all our React components, we have to use a Provider.
+
+20. What is a Provider? According to the React documentation, every context object comes with a Provider React component that allows consuming components to subscribe to context changes. 
+
+21. It is the provider that allows the context to be consumed by other components.
+
+22. Go to your App.js file. In order to create our provider, we have to import our ThemeContext.
+
+
+23. See folder context-api for code 
+
+24. To create a context, we use React.createContext which creates a context object. 
+
+25. You can pass in anything as an argument to React.createContext. 
+
+26. In this case, we are going to pass in a string which is the current theme mode. So now our current theme mode is the “light” theme mode.
+
+27. Further steps and notes are in code in folder context-api
+
+continue from EDITING OUR MainWithClass COMPONENT
+
+https://www.smashingmagazine.com/2020/01/introduction-react-context-api/
+

@@ -2,7 +2,7 @@ import React, {useState} from "react";
 
 import './App.css';
 import Header from "./Header.js";
-import Main from  "./MainWithClass.js";
+import Main from  "./MainWithFunction.js";
 import ThemeContext from './ThemeContext.js';
 
 function App() {

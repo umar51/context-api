@@ -7,7 +7,7 @@ import ThemeContext from "./ThemeContext"
 
 
 const Main = () => {                           //since ThemeContext return object of a const and an arow function so index [0] indicated to use const value
-    const theme = useContext(ThemeContext)[0]; //passing the ThemeContext(with value "light") object to useContext and saving as theme object
+    const theme = useContext(ThemeContext)[0]; //passing the ThemeContext(with value "light") object to useContext and saving value at index [0] as theme which is current theme
     const currentTheme = AppTheme[theme]; //passed theme object to AppTheme object in colors.js to get light theme
 
     return(
